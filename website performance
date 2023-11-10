@@ -1,1 +1,24 @@
+create temporary table Landingpage_id_new
+select 
+website_session_id, min(website_pageview_id) as lp_id
+from website_pageviews
+where created_at < '2012-06-14'
+group by website_session_id
+;
 
+-- count the total pageviews for each session, which has homepage as the landing page
+create temporary table bounced_session
+
+select Landingpage_id_new.website_session_id as homepage_lander_session_id, 
+count(website_pageviews.website_pageview_id) as total_pages_viewed
+from landingpage_id_new left join website_pageviews
+on landingpage_id_new.website_session_id = website_pageviews.website_session_id
+
+group by Landingpage_id_new.website_session_id
+having count(website_pageviews.website_pageview_id) = 1
+;
+
+select count(distinct Landingpage_id_new.website_session_id) as total_sessions, 
+count(distinct bounced_session.homepage_lander_session_id) as bounced_sessions,
+count(distinct bounced_session.homepage_lander_session_id)/count(distinct Landingpage_id_new.website_session_id) as bounce_rate
+from Landingpage_id_new, bounced_session
