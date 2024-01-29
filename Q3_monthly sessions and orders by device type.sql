@@ -16,4 +16,3 @@ group by month
 
 
 
-select * from website_sessions
