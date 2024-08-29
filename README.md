@@ -1,4 +1,4 @@
-# data-projects
+# ecommerce platform performance business intelligence analysis project
 
 e-commerce startup company performance analysis
 
